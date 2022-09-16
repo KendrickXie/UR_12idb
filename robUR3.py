@@ -681,7 +681,10 @@ class UR3(QObject):
                 return False
             failcount = 0
             while not isDistanceIn or not isNorthIn or not isEastIn:
-                cv2.imshow('camera', self.camera.image)
+                ret, cam_image = self.camera.vidcap.read()
+                cv2.imshow('camera', cam_image)
+                if cv2.waitKey(25) & 0xFF == ord('q'):
+                    break
 #                if not hasattr(self.camera, 'QRposition') or not hasattr(self.camera, 'QRsize'):
 #                    continue
                 if referenceName == "2QR":
