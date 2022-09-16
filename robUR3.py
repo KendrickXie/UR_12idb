@@ -21,6 +21,7 @@ from urdashboard import dashboard
 from urcamera import camera
 import camera_tools as ctool
 import robot
+import cv2
 #from urrobot import URRobot
 
 #### Standard orientations.
@@ -65,7 +66,7 @@ class UR3(QObject):
     tcp = [0.0,0.0,0.15,0.0,0.0,0.0]
     camtcp = [0, 0.04, 0.015, -math.pi/180*30, 0, 0]
 
-    def __init__(self, name = 'UR3', finger=True):
+    def __init__(self, name = 'UR3', finger=True, device = 0):
         super(UR3, self).__init__()
 # definition of Cartesian Axis of UR3 at 12idb.
 # X : positive - Out board
@@ -88,10 +89,10 @@ class UR3(QObject):
         except robot.urrobot.ursecmon.ProtectiveStopException:
             print("Protective stoppped.. Connecting again.")
             self.robot = Robot(IP)
-        if name == 'UR5':
-            self.camera = camera(IP='')
-        else:
-            self.camera = camera(IP)
+        # if name == 'UR5':
+        self.camera = camera(IP='', device = device)
+        # else:
+        #     self.camera = camera(IP)
         if finger:
             self.finger = Robotiq_Two_Finger_Gripper(self.robot)
         else:
@@ -101,8 +102,8 @@ class UR3(QObject):
         self.robot.set_tcp(self.tcp)
         self.robot.set_payload(1.35, (-0.003,0.01,0.037))
         self.dashboard = dashboard(self.robot)
-        if self.robot.secmon.is_protective_stopped():
-            self.dashboard.unlock()
+        # if self.robot.secmon.is_protective_stopped():
+        #     self.dashboard.unlock()
         #self.finger.gripper_activate()
         self.name = name
 
@@ -680,6 +681,7 @@ class UR3(QObject):
                 return False
             failcount = 0
             while not isDistanceIn or not isNorthIn or not isEastIn:
+                cv2.imshow('camera', self.camera.image)
 #                if not hasattr(self.camera, 'QRposition') or not hasattr(self.camera, 'QRsize'):
 #                    continue
                 if referenceName == "2QR":
