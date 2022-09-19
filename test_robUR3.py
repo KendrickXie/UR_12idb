@@ -11,9 +11,15 @@ while True:
     except:
         print('Failed attempt #{}'.format(i))
         i+=1
+        time.sleep(2)
 
 rob.camera.focus(450)
 
-rob.bring_QR_to_camera_center(referenceName='QR')
+# rob.bring_QR_to_camera_center(referenceName='QR')
+rob.camera.capture()
+rob.camera.decode()
+rob.relocate_camera()
+# rob.tilt_align()
 
 rob.terminate()
+

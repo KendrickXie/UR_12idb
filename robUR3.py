@@ -90,7 +90,7 @@ class UR3(QObject):
             print("Protective stoppped.. Connecting again.")
             self.robot = Robot(IP)
         # if name == 'UR5':
-        self.camera = camera(IP='', device = device)
+        self.camera = camera(IP=IP, device = device)
         # else:
         #     self.camera = camera(IP)
         if finger:
@@ -468,7 +468,7 @@ class UR3(QObject):
             rotcenter[i] = rotcenter[i]+distance*CAMVECTOR_ToolCoordinate[i]
         self.robot.set_tcp(rotcenter)
         t = self.robot.get_pose()
-        rotaxis = -came*dir[0] + camn*dir[1]
+        rotaxis = -came*dir[0] + camn*dir[1] #SIGN HERE?
         t.orient.rotate_b(rotaxis, math.pi/180*ang)
         #v = self.robot.get_pose()
         #v = v*t # rotate around tool z
@@ -681,10 +681,10 @@ class UR3(QObject):
                 return False
             failcount = 0
             while not isDistanceIn or not isNorthIn or not isEastIn:
-                ret, cam_image = self.camera.vidcap.read()
-                cv2.imshow('camera', cam_image)
-                if cv2.waitKey(25) & 0xFF == ord('q'):
-                    break
+                # ret, cam_image = self.camera.vidcap.read()
+                # cv2.imshow('camera', cam_image)
+                # if cv2.waitKey(25) & 0xFF == ord('q'):
+                #     break
 #                if not hasattr(self.camera, 'QRposition') or not hasattr(self.camera, 'QRsize'):
 #                    continue
                 if referenceName == "2QR":
@@ -751,7 +751,7 @@ class UR3(QObject):
             print("Bring QR closer to the camera")
 
     def tilt_align(self):
-        if b'Follow me' in self.camera.QRdata:
+        if b'Location 1' in self.camera.QRdata:
             h, pd, ang, tilt = ctool.decodefollowme(self)
             tilt = np.array(tilt)
             #height = 0.3796914766079877

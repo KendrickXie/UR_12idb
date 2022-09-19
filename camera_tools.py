@@ -58,7 +58,7 @@ def run_centering1(rob):
 
 class QRref:
     def __init__(self):
-        self.data = b'Follow me'
+        self.data = b'Location 1'
         self.height = [0.05, 0.1, 0.15, 0.2, 0.21, 0.25,0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65]
         self.edgelength = [229.0, 176.0, 142.0, 119.0, 116.0, 103.0,90.0,80.0, 72.8, 66.0, 62.0,57.0,52.0, 48.0]
         self.size = 55.4 # mm
